@@ -1,0 +1,27 @@
+<odoo>
+    <data>
+        <record id="view_event_form_rooms" model="ir.ui.view">
+            <field name="name">view.event.form.rooms</field>
+            <field name="model">event.event</field>
+            <field name="inherit_id" ref="event.view_event_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="Salas" name="rooms">
+                        <field 
+                            name="room_booking_ids"
+                            context="{
+                                'default_name': name
+                            }"
+                        >
+                            <list>
+                                <field name="room_id"/>
+                                <field name="start_datetime"/>
+                                <field name="stop_datetime"/>
+                            </list>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
