@@ -6,6 +6,7 @@ class Event(models.Model):
     _inherit = "event.event"
 
     room_booking_ids = fields.One2many("room.booking", "event_id")
+    instructor_ids = fields.Many2many("res.partner", string="Ponentes")
 
     def copy(self, default=None):
         self.ensure_one()

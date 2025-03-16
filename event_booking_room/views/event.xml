@@ -5,6 +5,9 @@
             <field name="model">event.event</field>
             <field name="inherit_id" ref="event.view_event_form" />
             <field name="arch" type="xml">
+                <xpath expr="//field[@name='tag_ids']" position="after">
+                    <field name="instructor_ids" widget="many2many_tags" />
+                </xpath>
                 <xpath expr="//notebook" position="inside">
                     <page string="Salas" name="rooms">
                         <field 
