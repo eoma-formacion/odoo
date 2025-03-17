@@ -41,3 +41,17 @@ class RoomBooking(models.Model):
                         end_date=end_date_tz.strftime("%d/%m/%Y %H:%M"),
                     )
                 )
+
+    def action_view_room_bookings(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Room Bookings",
+            "view_mode": "calendar,gantt",
+            "res_model": "room.booking",
+            "domain": [("room_id", "=", self.room_id.id)],
+            "context": {
+                "initial_date": self.event_id.date_begin,
+                **self.env.context,
+            },
+        }

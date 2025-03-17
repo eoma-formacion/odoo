@@ -7,6 +7,27 @@ class Event(models.Model):
 
     room_booking_ids = fields.One2many("room.booking", "event_id")
     instructor_ids = fields.Many2many("res.partner", string="Ponentes")
+    room_booking_count = fields.Integer(
+        string="Calendario", compute="_compute_room_booking_count"
+    )
+
+    def _compute_room_booking_count(self):
+        for event in self:
+            event.room_booking_count = len(event.room_booking_ids)
+
+    def action_view_room_bookings(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Calendario",
+            "view_mode": "calendar,gantt",
+            "res_model": "room.booking",
+            "domain": [("event_id", "=", self.id)],
+            "context": {
+                "initial_date": self.date_begin,
+                **self.env.context,
+            },
+        }
 
     def copy(self, default=None):
         self.ensure_one()
