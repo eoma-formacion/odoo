@@ -55,3 +55,20 @@ class RoomBooking(models.Model):
                 **self.env.context,
             },
         }
+
+
+class RoomRoom(models.Model):
+    _inherit = "room.room"
+
+    def action_view_room_bookings(self):
+        self.ensure_one()
+
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": "room.booking",
+            "name": _("Reservas"),
+            "domain": [("room_id", "in", self.ids)],
+            "context": {"default_room_id": self.id if len(self) == 1 else False},
+            "view_mode": "calendar",
+            "target": "new",
+        }
