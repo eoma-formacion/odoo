@@ -1,0 +1,11 @@
+<odoo>
+    <template id="navigation_buttons_inherit" inherit_id="website_sale.navigation_buttons">
+        <xpath expr="//div[1]" position="before">
+            <div class="d-flex flex-column mb-lg-0 pt-4">
+                <a t-attf-href="/event/prepayment/#{website_sale_order.id}" class="btn btn-primary">
+                    Pagar Anticipo
+                </a>
+            </div>
+        </xpath>
+    </template>
+</odoo>
