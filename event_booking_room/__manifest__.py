@@ -11,7 +11,7 @@
     "maintainer": "Bitmotto",  # str
     "website": "https://www.bitmotto.com",
     "depends": ["base", "event", "room"],  # list(str)
-    "data": ["views/event.xml"],  # list(str)
+    "data": ["views/event.xml", "views/room_room.xml"],  # list(str)
     "license": "LGPL-3",  # str - default: LGPL-3
     "installable": True,  # bool - default: True
     "auto_install": False,  # bool - default: False

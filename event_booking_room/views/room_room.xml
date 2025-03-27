@@ -1,0 +1,14 @@
+<odoo>
+    <data>
+        <record id="view_room_room_form" model="ir.ui.view">
+            <field name="name">view.room.room.form</field>
+            <field name="model">room.room</field>
+            <field name="inherit_id" ref="room.room_room_view_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <button name="action_view_room_bookings" type="object" class="oe_highlight" string="Ver Reservas" options="{'target': 'new'}" icon="fa-calendar" />
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
