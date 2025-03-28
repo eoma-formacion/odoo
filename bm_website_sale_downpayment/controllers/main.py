@@ -5,7 +5,10 @@ from odoo.http import request
 class EventPrepaymentController(http.Controller):
 
     @http.route(
-        "/event/prepayment/<int:order_id>", type="http", auth="public", website=True
+        "/website/sale/prepayment/<int:order_id>",
+        type="http",
+        auth="public",
+        website=True,
     )
     def event_prepayment(self, order_id=None, **kwargs):
         if not order_id:
@@ -18,4 +21,6 @@ class EventPrepaymentController(http.Controller):
 
         # Lógica personalizada para la orden
         action = sale_order.action_preview_sale_order()
-        return request.redirect(action["url"])
+        return request.redirect(
+            action["url"] + "&downpayment=true&showPaymentModal=true"
+        )
