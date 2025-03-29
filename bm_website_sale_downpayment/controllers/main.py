@@ -46,6 +46,7 @@ class BmWebsiteSale(WebsiteSale):
         :return: The newly created partner.
         :rtype: res.partner
         """
+        country = request.env["res.country"].search([("code", "=", "ES")], limit=1)
         registrations = (
             request.env["event.registration"]
             .sudo()
@@ -68,6 +69,7 @@ class BmWebsiteSale(WebsiteSale):
                             "name": register.name,
                             "email": register.email,
                             "phone": register.phone,
+                            "country_id": country.id,
                         }
                     )
                 )
