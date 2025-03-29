@@ -37,6 +37,8 @@ class BmWebsiteSale(WebsiteSale):
                  appropriate page.
         """
         self.create_partner_for_event_registration(order_sudo)
+        order_sudo._recompute_taxes()
+        order_sudo._recompute_prices()
         return request.redirect("/website/sale/prepayment/" + str(order_sudo.id))
 
     def create_partner_for_event_registration(self, order_sudo):
