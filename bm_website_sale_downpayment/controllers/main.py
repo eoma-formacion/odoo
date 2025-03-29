@@ -36,4 +36,44 @@ class BmWebsiteSale(WebsiteSale):
         :return: None if both the cart and its addresses are valid; otherwise, a redirection to the
                  appropriate page.
         """
+        self.create_partner_for_event_registration(order_sudo)
         return request.redirect("/website/sale/prepayment/" + str(order_sudo.id))
+
+    def create_partner_for_event_registration(self, order_sudo):
+        """Create a new partner from the given order.
+
+        :param sale.order order_sudo: The order from which to create the partner.
+        :return: The newly created partner.
+        :rtype: res.partner
+        """
+        registrations = (
+            request.env["event.registration"]
+            .sudo()
+            .search([("sale_order_id", "in", order_sudo.ids)])
+        )
+        main_partner = None
+        for register in registrations:
+            partner = (
+                request.env["res.partner"]
+                .sudo()
+                .search([("email", "=", register.email)], limit=1)
+            )
+            # If not partner, create one
+            if not partner:
+                partner = (
+                    request.env["res.partner"]
+                    .sudo()
+                    .create(
+                        {
+                            "name": register.name,
+                            "email": register.email,
+                            "phone": register.phone,
+                        }
+                    )
+                )
+            if main_partner is None:
+                main_partner = partner
+
+            register.partner_id = main_partner.id
+
+        order_sudo.partner_id = main_partner.id
