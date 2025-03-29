@@ -1,0 +1,30 @@
+<odoo>
+    <data>
+        <record id="view_bm_contact_especialidad_form" model="ir.ui.view">
+            <field name="name">bm_contact.especialidad.form</field>
+            <field name="model">res.partner.especialidad</field>
+            <field name="arch" type="xml">
+                <form string="Especialidad">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="active"/>
+                            <field name="color"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="view_bm_contact_especialidad_list" model="ir.ui.view">
+            <field name="name">bm_contact.especialidad.list</field>
+            <field name="model">res.partner.especialidad</field>
+            <field name="arch" type="xml">
+                <list string="Especialidad">
+                    <field name="name"/>
+                    <field name="active"/>
+                    <field name="color"/>
+                </list>
+            </field>
+        </record>
+    </data>
+</odoo>
