@@ -48,7 +48,10 @@ class RedsysController(http.Controller):
         website=True,
     )
     def redsys_result(self, page, **vals):
-        if post:
+        _logger.info(
+            "Redsys: entering form_feedback with vals data %s", pprint.pformat(vals)
+        )
+        if vals:
             request.env["payment.transaction"].sudo()._handle_notification_data(
                 "redsys", vals
             )
