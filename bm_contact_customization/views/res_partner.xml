@@ -1,0 +1,17 @@
+<odoo>
+    <data>
+        <record id="view_bm_contact_form" model="ir.ui.view">
+            <field name="name">bm_contact.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='function']" position="after">
+                    <field name="nro_colegiado"/>
+                </xpath>
+                <xpath expr="//field[@name='function']" position="replace">
+¿                   <field name="especialidad_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
