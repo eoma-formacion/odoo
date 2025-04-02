@@ -1,0 +1,33 @@
+<odoo>
+    <data>
+        <record id="view_quote_balance" model="ir.ui.view">
+            <field name="name">relationship_payments_with_quoters.quote_balance</field>
+            <field name="model">quote.balance</field>
+            <field name="arch" type="xml">
+                <form create="false">
+                    <sheet>
+                        <group>
+                            <field name="quote_id" />
+                            <field name="currency_id" invisible="1" />
+                        </group>
+                        <notebook>
+                            <page string="Pagos realizados">
+                                <field name="payment_ids" nolabel="1" colspan="3" editable="false">
+                                    <list default_order="id" >
+                                        <field name="name" />
+                                        <field name="amount" />
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                        <group string="Resumen">
+                            <field name="quote_amount" readonly="True"/>
+                            <field name="total_payments_amount" readonly="True"/>
+                            <field name="balance_amount" readonly="True"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>
