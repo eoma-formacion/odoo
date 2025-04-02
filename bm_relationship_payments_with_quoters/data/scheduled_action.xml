@@ -1,0 +1,18 @@
+<odoo>
+    <data>
+
+        <!-- Acción Programada para ejecutar el método `check_due_tasks` diariamente -->
+        <record id="ir_cron_check_due_tasks" model="ir.cron">
+            <field name="name">Recalcular campo remaining amount</field>
+            <field name="active" eval="False"/>
+            <field name="model_id" ref="model_sale_order"/> <!-- Referencia al modelo 'sale.order' -->
+            <field name="state">code</field> <!-- El estado 'code' indica que se ejecutará código Python -->
+            <field name="code">model.action_recompute_remaining_amount()</field> <!-- El código a ejecutar -->
+            <field name="interval_number">1</field> <!-- Ejecutar cada 1 día -->
+            <field name="interval_type">days</field> <!-- Tipo de intervalo: días -->
+            <field name="nextcall" eval="(datetime.utcnow() + timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="user_id" ref="base.user_root"/> <!-- Usuario que ejecutará la acción programada -->
+        </record>
+
+    </data>
+</odoo>

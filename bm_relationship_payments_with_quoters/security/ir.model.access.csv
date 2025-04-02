@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+quote_balance,quote_balance,model_quote_balance,base.group_user,1,0,1,0
+payment_quote,payment_quote,model_payment_quote,base.group_user,1,0,1,0
+access_account_payment_all,account_payment_all,model_account_payment,,1,1,1,1
