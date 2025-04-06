@@ -12,6 +12,7 @@
                 </xpath>
                 <xpath expr="//field[@name='tag_ids']" position="after">
                     <field name="instructor_ids" widget="many2many_tags" />
+                    <field name="link_dossier" />
                 </xpath>
                 <xpath expr="//notebook" position="inside">
                     <page string="Salas" name="rooms">
