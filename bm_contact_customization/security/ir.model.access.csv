@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 bm_contact_especialidad,bm_contact_especialidad,model_res_partner_especialidad,base.group_user,1,1,1,1
+bm_contact_categoria,bm_contact_categoria,model_res_partner_categoria,base.group_user,1,1,1,1
