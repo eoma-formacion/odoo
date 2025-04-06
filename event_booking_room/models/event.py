@@ -10,6 +10,10 @@ class Event(models.Model):
     room_booking_count = fields.Integer(
         string="Calendario", compute="_compute_room_booking_count"
     )
+    link_dossier = fields.Char(
+        string="Link a Dossier",
+        help="Enlace al dossier de la actividad, si existe.",
+    )
 
     def _compute_room_booking_count(self):
         for event in self:
