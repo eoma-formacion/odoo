@@ -11,3 +11,9 @@ class ResPartner(models.Model):
         string="Especialidad",
     )
     nro_colegiado = fields.Char(string="Nro. Colegiado")
+    categoria_ids = fields.Many2many(
+        "res.partner.categoria",
+        column1="partner_id",
+        column2="categoria_id",
+        string="Categorias",
+    )

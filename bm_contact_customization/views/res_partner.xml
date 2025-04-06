@@ -11,6 +11,9 @@
                 <xpath expr="//field[@name='function']" position="replace">
 ¿                   <field name="especialidad_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                 </xpath>
+                <xpath expr="//field[@name='title']" position="replace">
+¿                   <field name="categoria_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                </xpath>
             </field>
         </record>
     </data>

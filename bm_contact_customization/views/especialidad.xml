@@ -26,5 +26,31 @@
                 </list>
             </field>
         </record>
+        <record id="view_bm_contact_categoria_form" model="ir.ui.view">
+            <field name="name">bm_contact.categoria.form</field>
+            <field name="model">res.partner.categoria</field>
+            <field name="arch" type="xml">
+                <form string="Categoría">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="active"/>
+                            <field name="color"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="view_bm_contact_categoria_list" model="ir.ui.view">
+            <field name="name">bm_contact.categoria.list</field>
+            <field name="model">res.partner.categoria</field>
+            <field name="arch" type="xml">
+                <list string="Categoría">
+                    <field name="name"/>
+                    <field name="active"/>
+                    <field name="color"/>
+                </list>
+            </field>
+        </record>
     </data>
 </odoo>
