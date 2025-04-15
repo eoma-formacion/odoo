@@ -149,3 +149,21 @@ class TxRedsys(models.Model):
             }
         )
         return redsys_values
+
+    def _post_process(self):
+        """Override of `payment` to add account-specific logic to the post-processing.
+
+        In particular, for confirmed transactions we write a message in the chatter with the payment
+        and transaction references, post relevant fiscal documents, and create missing payments. For
+        cancelled transactions, we cancel the payment.
+        """
+        super()._post_process()
+        for tx in self.filtered(lambda t: t.state == "done"):
+            if (
+                tx.payment_id
+                and tx.payment_id.state not in ["canceled", "rejected"]
+                and not tx.payment_id.quoter_id
+            ):
+                sale_order = tx.sale_order_ids
+                if sale_order:
+                    tx.payment_id.quoter_id = sale_order[0].id
