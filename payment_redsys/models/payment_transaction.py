@@ -79,8 +79,8 @@ class TxRedsys(models.Model):
     def _get_redsys_state(self, status_code):
         if 0 <= status_code <= 100:
             return "done"
-        elif status_code <= 203:
-            return "pending"
+        # elif status_code <= 203:
+        #    return "pending"
         elif 912 <= status_code <= 9912:
             return "cancel"
         else:
