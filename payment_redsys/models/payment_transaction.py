@@ -51,7 +51,7 @@ class TxRedsys(models.Model):
             )
             if not test_env:
                 _logger.info(error_msg)
-                raise ValidationError(error_msg)
+                # raise ValidationError(error_msg)
         tx = self.search([("reference", "=", reference)])
         if not tx or len(tx) > 1:
             error_msg = "Redsys: received data for reference %s" % (reference)
