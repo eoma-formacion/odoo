@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit event form view to add event banner field -->
+    <record id="view_event_form_inherit_banner" model="ir.ui.view">
+        <field name="name">event.event.form.inherit.banner</field>
+        <field name="model">event.event</field>
+        <field name="inherit_id" ref="event.view_event_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='badge_image']" position="after">
+                <field name="event_banner" widget="image"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

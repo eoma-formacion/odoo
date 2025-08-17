@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Standalone minimal checkout template -->
+    <template id="minimal_checkout_page" name="Minimal Checkout Page">
+        <t t-call="website.layout">
+            <t t-set="pageName" t-value="'checkout'"/>
+            <t t-set="title" t-value="page_title or 'Event Checkout'"/>
+            
+            <!-- Custom styles to hide header and footer -->
+            <t t-set="head">
+                <style>
+                    /* Hide website header and footer */
+                    #top, header { display: none !important; }
+                    #bottom, footer { display: none !important; }
+                    
+                    /* Make content full width */
+                    #wrapwrap { 
+                        padding-top: 0 !important; 
+                        margin-top: 0 !important;
+                    }
+                    
+                    #wrap { 
+                        min-height: 100vh;
+                        padding-top: 0 !important;
+                        margin-top: 0 !important;
+                    }
+                    
+                    /* Remove any default margins/padding */
+                    body { 
+                        margin: 0;
+                        padding: 0;
+                    }
+                    
+                    .minimal-checkout-wrapper {
+                        width: 100%;
+                        margin: 0;
+                        padding: 0;
+                    }
+                </style>
+            </t>
+                <div class="minimal-checkout-wrapper" t-att-data-event-id="event.id">
+                    <!-- Company Logo -->
+                    <div class="company-logo">
+                        <img src="/event_checkout_minimal/static/img/company-logo.svg" alt="Company Logo" 
+                             onerror="console.log('Logo failed to load:', this.src); this.style.display='none';"
+                             onload="console.log('Logo loaded successfully:', this.src);"/>
+                    </div>
+                    
+                    <!-- Progress Steps -->
+                    <div class="checkout-progress">
+                        <div class="progress-container">
+                            <div class="progress-step active" data-step="1">
+                                <span class="step-number">1</span>
+                                <span class="step-title">Entradas</span>
+                            </div>
+                            <div class="progress-line"></div>
+                            <div class="progress-step" data-step="2">
+                                <span class="step-number">2</span>
+                                <span class="step-title">Asistentes</span>
+                            </div>
+                            <div class="progress-line"></div>
+                            <div class="progress-step" data-step="3">
+                                <span class="step-number">3</span>
+                                <span class="step-title">Facturación</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Checkout Card -->
+                    <div class="checkout-card">
+                        <!-- Event Header -->
+                        <div t-attf-class="event-header {{ 'event-header-with-banner' if event.event_banner else '' }}" 
+                             t-attf-style="{{ 'background-image: url(/web/image/event.event/' + str(event.id) + '/event_banner); background-size: cover; background-position: center;' if event.event_banner else '' }}">
+                            <div class="event-header-content">
+                                <h1 t-attf-class="event-title {{ 'text-white' if event.event_banner else '' }}" t-field="event.name"/>
+                                <div t-attf-class="event-meta {{ 'text-white' if event.event_banner else '' }}">
+                                    <span class="event-date">
+                                        <i class="fa fa-calendar"/>
+                                        <span t-field="event.date_begin" t-options="{'widget': 'datetime', 'format': 'dd/MM/yyyy HH:mm'}"/>
+                                    </span>
+                                    <span class="event-location" t-if="event.address_id">
+                                        <i class="fa fa-map-marker"/>
+                                        <span><t t-esc="', '.join(filter(None, [event.address_id.street, event.address_id.street2, event.address_id.city, event.address_id.state_id.name, event.address_id.country_id.name]))"/></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step Content -->
+                        <div class="step-content">
+                            <!-- Step 1: Ticket Selection -->
+                            <div class="step-panel active" data-step="1">
+                                <h3>Seleccionar Entradas</h3>
+                                <form id="minimal_registration_form" t-attf-action="/event/#{slug(event)}/registration/new" method="post">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    
+                                    <div class="tickets-section">
+                                        <t t-foreach="event.event_ticket_ids.filtered(lambda t: t.is_launched and t.sale_available and not t.is_expired)" t-as="ticket">
+                                            <div class="ticket-row" t-att-data-ticket-id="ticket.id">
+                                                <div class="ticket-info">
+                                                    <h4 class="ticket-name" t-field="ticket.name"/>
+                                                    <p class="ticket-description" t-field="ticket.description" t-if="ticket.description"/>
+                                                    <div class="ticket-meta">
+                                                        <span class="ticket-price" t-if="ticket.price &gt; 0">
+                                                            <span t-esc="'{:.2f}'.format(ticket.price).replace('.', ',') + ' €'"/>
+                                                        </span>
+                                                        <span class="ticket-price" t-else="">Gratis</span>
+                                                        <span class="ticket-availability">
+                                                            <t t-if="ticket.seats_max and ticket.seats_max > 0">
+                                                                <span t-field="ticket.seats_available"/> disponibles
+                                                            </t>
+                                                            <t t-else="">Ilimitado</t>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="ticket-quantity">
+                                                    <div class="quantity-controls">
+                                                        <button type="button" class="qty-btn qty-minus" t-att-data-ticket-id="ticket.id">-</button>
+                                                        <input type="number" 
+                                                               t-attf-name="nb_register-#{ticket.id}"
+                                                               t-att-data-ticket-id="ticket.id"
+                                                               class="qty-input"
+                                                               value="0"
+                                                               min="0"
+                                                               t-att-max="ticket.seats_available if (ticket.seats_max and ticket.seats_max > 0) else 10"/>
+                                                        <button type="button" class="qty-btn qty-plus" t-att-data-ticket-id="ticket.id">+</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </div>
+                                    
+                                    <div class="step-actions">
+                                        <button type="button" class="btn-next" id="tickets-next" disabled="disabled">
+                                            Continuar a Asistentes <i class="fa fa-arrow-right"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Step 2: Attendee Details -->
+                            <div class="step-panel" data-step="2">
+                                <h3>Información de Asistentes</h3>
+                                <div id="attendee-forms">
+                                    <!-- Dynamically populated by JavaScript -->
+                                </div>
+                                <div class="step-actions">
+                                    <button type="button" class="btn-back" id="attendees-back">Atrás</button>
+                                    <button type="button" class="btn-next" id="attendees-next">
+                                        Continuar a Facturación <i class="fa fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Step 3: Billing Information -->
+                            <div class="step-panel" data-step="3">
+                                <h3>Información de Facturación</h3>
+                                
+                                <!-- Billing Type Toggle -->
+                                <div class="billing-type-toggle mb-3">
+                                    <label class="form-label"><strong>¿Es una empresa?</strong></label>
+                                    <div class="form-check-group">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="billing_type" id="billing_person" value="person" checked="checked"/>
+                                            <label class="form-check-label" for="billing_person">Particular</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="billing_type" id="billing_company" value="company"/>
+                                            <label class="form-check-label" for="billing_company">Empresa</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Billing Form -->
+                                <div id="billing-form">
+                                    <!-- Person Fields (default) -->
+                                    <div class="billing-fields person-fields">
+                                        <div class="form-group">
+                                            <label for="billing_name">Nombre Completo *</label>
+                                            <input type="text" id="billing_name" name="billing_name" class="form-control" required="required"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="billing_email">Dirección de Email *</label>
+                                            <input type="email" id="billing_email" name="billing_email" class="form-control" required="required"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="billing_phone">Teléfono *</label>
+                                            <input type="tel" id="billing_phone" name="billing_phone" class="form-control" required="required"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="billing_address">Dirección *</label>
+                                            <textarea id="billing_address" name="billing_address" class="form-control" rows="2" required="required"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="billing_nif">NIF *</label>
+                                            <input type="text" id="billing_nif" name="billing_nif" class="form-control" placeholder="12345678A" required="required"/>
+                                        </div>
+                                    </div>
+
+                                    <!-- Company Fields (hidden by default) -->
+                                    <div class="billing-fields company-fields" style="display: none;">
+                                        <div class="form-group">
+                                            <label for="billing_company_name">Razón Social *</label>
+                                            <input type="text" id="billing_company_name" name="billing_company_name" class="form-control"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="billing_company_email">Email de Contacto *</label>
+                                            <input type="email" id="billing_company_email" name="billing_company_email" class="form-control"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="billing_company_phone">Teléfono *</label>
+                                            <input type="tel" id="billing_company_phone" name="billing_company_phone" class="form-control"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="billing_company_address">Dirección Fiscal *</label>
+                                            <textarea id="billing_company_address" name="billing_company_address" class="form-control" rows="2"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="billing_cif">CIF *</label>
+                                            <input type="text" id="billing_cif" name="billing_cif" class="form-control" placeholder="A12345678"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="step-actions">
+                                    <button type="button" class="btn-back" id="billing-back">Atrás</button>
+                                    <button type="submit" class="btn-primary" id="billing-submit" form="minimal_registration_form">
+                                        Completar Registro <i class="fa fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Order Summary Sidebar -->
+                        <div class="order-sidebar">
+                            <div class="sidebar-header">
+                                <h4>Resumen del Pedido</h4>
+                            </div>
+                            <div class="order-items" id="order-summary">
+                                <div class="empty-cart">No hay entradas seleccionadas</div>
+                            </div>
+                            <div class="order-total">
+                                <div class="total-line">
+                                    <span>Total: </span>
+                                    <span class="total-amount">0,00 €</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="checkout-footer">
+                        <div class="security-badges">
+                            <i class="fa fa-shield"></i> Pago seguro
+                        </div>
+                    </div>
+                </div>
+        </t>
+    </template>
+
+    <!-- Replace modal content with minimal checkout when ?minimal=1 -->
+    <template id="modal_ticket_registration_minimal" inherit_id="website_event.modal_ticket_registration">
+        <xpath expr="//div[@class='modal-content']" position="replace">
+            <div class="modal-content">
+                <!-- Check if minimal mode is requested -->
+                <t t-set="minimal_mode" t-value="request.httprequest.args.get('minimal', '0') == '1'"/>
+                
+                <!-- Conditional rendering based on minimal parameter -->
+                <t t-if="minimal_mode">
+                    <!-- Full-page minimal checkout -->
+                    <div class="minimal-checkout-wrapper" t-att-data-event-id="event.id">
+                        <!-- Company Logo -->
+                        <div class="company-logo">
+                            <img src="/event_checkout_minimal/static/img/company-logo.svg" alt="Company Logo" 
+                                 onerror="console.log('Logo failed to load:', this.src); this.style.display='none';"
+                                 onload="console.log('Logo loaded successfully:', this.src);"/>
+                        </div>
+                        
+                        <!-- Progress Steps -->
+                        <div class="checkout-progress">
+                            <div class="progress-container">
+                                <div class="progress-step active" data-step="1">
+                                    <span class="step-number">1</span>
+                                    <span class="step-title">Entradas</span>
+                                </div>
+                                <div class="progress-line"></div>
+                                <div class="progress-step" data-step="2">
+                                    <span class="step-number">2</span>
+                                    <span class="step-title">Asistentes</span>
+                                </div>
+                                <div class="progress-line"></div>
+                                <div class="progress-step" data-step="3">
+                                    <span class="step-number">3</span>
+                                    <span class="step-title">Facturación</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Checkout Card -->
+                        <div class="checkout-card">
+                            <!-- Event Header -->
+                            <div t-attf-class="event-header {{ 'event-header-with-banner' if event.event_banner else '' }}" 
+                                 t-attf-style="{{ 'background-image: url(/web/image/event.event/' + str(event.id) + '/event_banner); background-size: cover; background-position: center;' if event.event_banner else '' }}">
+                                <div class="event-header-content">
+                                    <h1 t-attf-class="event-title {{ 'text-white' if event.event_banner else '' }}" t-field="event.name"/>
+                                    <div t-attf-class="event-meta {{ 'text-white' if event.event_banner else '' }}">
+                                        <span class="event-date">
+                                            <i class="fa fa-calendar"/>
+                                            <span t-field="event.date_begin" t-options="{'widget': 'datetime', 'format': 'dd/MM/yyyy HH:mm'}"/>
+                                        </span>
+                                        <span class="event-location" t-if="event.address_id">
+                                            <i class="fa fa-map-marker"/>
+                                            <span><t t-esc="', '.join(filter(None, [event.address_id.street, event.address_id.street2, event.address_id.city, event.address_id.state_id.name, event.address_id.country_id.name]))"/></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step Content -->
+                            <div class="step-content">
+                                <!-- Step 1: Ticket Selection -->
+                                <div class="step-panel active" data-step="1">
+                                    <h3>Seleccionar Entradas</h3>
+                                    <form id="minimal_registration_form" t-attf-action="/event/#{slug(event)}/registration/new" method="post">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        
+                                        <div class="tickets-section">
+                                            <t t-foreach="event.event_ticket_ids.filtered(lambda t: t.is_launched and t.sale_available and not t.is_expired)" t-as="ticket">
+                                                <div class="ticket-row" t-att-data-ticket-id="ticket.id">
+                                                    <div class="ticket-info">
+                                                        <h4 class="ticket-name" t-field="ticket.name"/>
+                                                        <p class="ticket-description" t-field="ticket.description" t-if="ticket.description"/>
+                                                        <div class="ticket-meta">
+                                                            <span class="ticket-price" t-if="ticket.price &gt; 0">
+                                                                <span t-esc="'{:.2f}'.format(ticket.price).replace('.', ',') + ' €'"/>
+                                                            </span>
+                                                            <span class="ticket-price" t-else="">Gratis</span>
+                                                            <span class="ticket-availability">
+                                                                <t t-if="ticket.seats_max and ticket.seats_max > 0">
+                                                                    <span t-field="ticket.seats_available"/> disponibles
+                                                                </t>
+                                                                <t t-else="">Ilimitado</t>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="ticket-quantity">
+                                                        <div class="quantity-controls">
+                                                            <button type="button" class="qty-btn qty-minus" t-att-data-ticket-id="ticket.id">-</button>
+                                                            <input type="number" 
+                                                                   t-attf-name="nb_register-#{ticket.id}"
+                                                                   t-att-data-ticket-id="ticket.id"
+                                                                   class="qty-input"
+                                                                   value="0"
+                                                                   min="0"
+                                                                   t-att-max="ticket.seats_available if (ticket.seats_max and ticket.seats_max > 0) else 10"/>
+                                                            <button type="button" class="qty-btn qty-plus" t-att-data-ticket-id="ticket.id">+</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </div>
+                                        
+                                        <div class="step-actions">
+                                            <button type="button" class="btn-next" id="tickets-next" disabled="disabled">
+                                                Continuar a Asistentes <i class="fa fa-arrow-right"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <!-- Step 2: Attendee Details -->
+                                <div class="step-panel" data-step="2">
+                                    <h3>Información de Asistentes</h3>
+                                    <div id="attendee-forms">
+                                        <!-- Dynamically populated by JavaScript -->
+                                    </div>
+                                    <div class="step-actions">
+                                        <button type="button" class="btn-back" id="attendees-back">Atrás</button>
+                                        <button type="button" class="btn-next" id="attendees-next">
+                                            Continuar a Facturación <i class="fa fa-arrow-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Step 3: Billing Information -->
+                                <div class="step-panel" data-step="3">
+                                    <h3>Información de Facturación</h3>
+                                    
+                                    <!-- Billing Type Toggle -->
+                                    <div class="billing-type-toggle mb-3">
+                                        <label class="form-label"><strong>¿Es una empresa?</strong></label>
+                                        <div class="form-check-group">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="billing_type" id="billing_person" value="person" checked="checked"/>
+                                                <label class="form-check-label" for="billing_person">Particular</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="billing_type" id="billing_company" value="company"/>
+                                                <label class="form-check-label" for="billing_company">Empresa</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Billing Form -->
+                                    <div id="billing-form">
+                                        <!-- Person Fields (default) -->
+                                        <div class="billing-fields person-fields">
+                                            <div class="form-group">
+                                                <label for="billing_name">Nombre Completo *</label>
+                                                <input type="text" id="billing_name" name="billing_name" class="form-control" required="required"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="billing_email">Dirección de Email *</label>
+                                                <input type="email" id="billing_email" name="billing_email" class="form-control" required="required"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="billing_phone">Teléfono *</label>
+                                                <input type="tel" id="billing_phone" name="billing_phone" class="form-control" required="required"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="billing_address">Dirección *</label>
+                                                <textarea id="billing_address" name="billing_address" class="form-control" rows="2" required="required"></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="billing_nif">NIF *</label>
+                                                <input type="text" id="billing_nif" name="billing_nif" class="form-control" placeholder="12345678A" required="required"/>
+                                            </div>
+                                        </div>
+
+                                        <!-- Company Fields (hidden by default) -->
+                                        <div class="billing-fields company-fields" style="display: none;">
+                                            <div class="form-group">
+                                                <label for="billing_company_name">Razón Social *</label>
+                                                <input type="text" id="billing_company_name" name="billing_company_name" class="form-control"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="billing_company_email">Email de Contacto *</label>
+                                                <input type="email" id="billing_company_email" name="billing_company_email" class="form-control"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="billing_company_phone">Teléfono *</label>
+                                                <input type="tel" id="billing_company_phone" name="billing_company_phone" class="form-control"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="billing_company_address">Dirección Fiscal *</label>
+                                                <textarea id="billing_company_address" name="billing_company_address" class="form-control" rows="2"></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="billing_cif">CIF *</label>
+                                                <input type="text" id="billing_cif" name="billing_cif" class="form-control" placeholder="A12345678"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="step-actions">
+                                        <button type="button" class="btn-back" id="billing-back">Atrás</button>
+                                        <button type="submit" class="btn-primary" id="billing-submit" form="minimal_registration_form">
+                                            Completar Registro <i class="fa fa-arrow-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Order Summary Sidebar -->
+                            <div class="order-sidebar">
+                                <div class="sidebar-header">
+                                    <h4>Resumen del Pedido</h4>
+                                </div>
+                                <div class="order-items" id="order-summary">
+                                    <div class="empty-cart">No hay entradas seleccionadas</div>
+                                </div>
+                                <div class="order-total">
+                                    <div class="total-line">
+                                        <span>Total: </span>
+                                        <span class="total-amount">0,00 €</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="checkout-footer">
+                            <div class="security-badges">
+                                <i class="fa fa-shield"></i> Pago seguro
+                            </div>
+                        </div>
+                    </div>
+                </t>
+                
+                <!-- Standard modal for ?minimal=0 or no parameter -->
+                <t t-else="">
+                    <div class="modal-header">
+                        <div class="o_wevent_registration_title modal-title fs-5" id="staticBackdropLabel">Tickets</div>
+                        <div t-if="len(event.event_ticket_ids) &gt; 2" class="o_wevent_price_range ms-2"/>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form id="registration_form" t-attf-action="/event/#{slug(event)}/registration/new" method="post">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <div class="modal-body">
+                            <div id="o_wevent_tickets" class="o_wevent_js_ticket_details" t-att-data-event-id="event.id">
+                                <!-- Standard Odoo ticket interface will load here via JavaScript -->
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </div>
+                    </form>
+                </t>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- Add Quick Checkout button -->
+    <template id="registration_template_minimal" inherit_id="website_event.registration_template">
+        <xpath expr="//button[@data-bs-target='#modal_ticket_registration']" position="after">
+            <div class="mt-2">
+                <a t-attf-href="/event/#{slug(event)}/register?minimal=1" 
+                   class="btn btn-outline-primary btn-sm">
+                    <i class="fa fa-bolt"></i> Quick Checkout
+                </a>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- Style overrides for modal when in minimal mode -->
+    <template id="modal_style_override_minimal" inherit_id="website_event.modal_ticket_registration">
+        <xpath expr="//div[@class='modal fade']" position="attributes">
+            <attribute name="t-attf-class">modal fade {{ 'minimal-checkout-modal' if request.httprequest.args.get('minimal', '0') == '1' else '' }}</attribute>
+        </xpath>
+    </template>
+</odoo>
