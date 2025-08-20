@@ -1,9 +1,9 @@
 {
-    'name': 'Event Minimal Checkout',
-    'version': '18.0.1.0.1',
-    'category': 'Website/Events',
-    'summary': 'Minimalist Stripe-style checkout for event registration',
-    'description': """
+    "name": "Event Minimal Checkout",
+    "version": "18.0.1.0.1",
+    "category": "Website/Events",
+    "summary": "Minimalist Stripe-style checkout for event registration",
+    "description": """
 Event Minimal Checkout
 ======================
 
@@ -30,27 +30,28 @@ Usage:
 * Access via /event/<slug>/register?minimal=1
 * Falls back to standard registration with ?minimal=0
 """,
-    'author': 'Your Company',
-    'website': 'https://www.yourcompany.com',
-    'license': 'LGPL-3',
-    'depends': [
-        'website_event',
-        'website_payment',
-        'payment',
-        'website_sale',
-        'sale',
+    "author": "Your Company",
+    "website": "https://www.yourcompany.com",
+    "license": "LGPL-3",
+    "depends": [
+        "website_event",
+        "website_payment",
+        "payment",
+        "website_sale",
+        "sale",
     ],
-    'data': [
-        'views/templates.xml',
-        'views/event_views.xml',
+    "data": [
+        "security/ir.model.access.csv",
+        "views/templates.xml",
+        "views/event_views.xml",
     ],
-    'assets': {
-        'web.assets_frontend': [
-            'event_checkout_minimal/static/src/css/checkout.css',
-            'event_checkout_minimal/static/src/js/minimal_checkout.js',
+    "assets": {
+        "web.assets_frontend": [
+            "event_checkout_minimal/static/src/css/checkout.css",
+            "event_checkout_minimal/static/src/js/minimal_checkout.js",
         ],
     },
-    'installable': True,
-    'application': False,
-    'auto_install': False,
+    "installable": True,
+    "application": False,
+    "auto_install": False,
 }

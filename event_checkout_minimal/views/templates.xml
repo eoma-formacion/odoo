@@ -78,10 +78,10 @@
                                         <i class="fa fa-calendar"/>
                                         <span t-field="event.date_begin" t-options="{'widget': 'datetime', 'format': 'dd/MM/yyyy HH:mm'}"/>
                                     </span>
-                                    <span class="event-location" t-if="event.address_id">
-                                        <i class="fa fa-map-marker"/>
-                                        <span><t t-esc="', '.join(filter(None, [event.address_id.street, event.address_id.street2, event.address_id.city, event.address_id.state_id.name, event.address_id.country_id.name]))"/></span>
-                                    </span>
+                                                                            <span class="event-location" t-if="address_info and any(address_info.values())">
+                                            <i class="fa fa-map-marker"/>
+                                            <span><t t-esc="', '.join(filter(None, [address_info.get('street', ''), address_info.get('city', ''), address_info.get('state_name', ''), address_info.get('country_name', '')]))"/></span>
+                                        </span>
                                 </div>
                             </div>
                         </div>
@@ -309,9 +309,9 @@
                                             <i class="fa fa-calendar"/>
                                             <span t-field="event.date_begin" t-options="{'widget': 'datetime', 'format': 'dd/MM/yyyy HH:mm'}"/>
                                         </span>
-                                        <span class="event-location" t-if="event.address_id">
+                                        <span class="event-location" t-if="address_info and any(address_info.values())">
                                             <i class="fa fa-map-marker"/>
-                                            <span><t t-esc="', '.join(filter(None, [event.address_id.street, event.address_id.street2, event.address_id.city, event.address_id.state_id.name, event.address_id.country_id.name]))"/></span>
+                                            <span><t t-esc="', '.join(filter(None, [address_info.get('street', ''), address_info.get('street2', ''), address_info.get('city', ''), address_info.get('state_name', ''), address_info.get('country_name', '')]))"/></span>
                                         </span>
                                     </div>
                                 </div>
