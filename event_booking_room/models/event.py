@@ -62,3 +62,15 @@ class Event(models.Model):
             }
         )
         return super(Event, self).copy(default)
+
+    def write(self, vals):
+        res = super(Event, self).write(vals)
+        if "stage_id" in vals:
+            self.unlink_room_bookings()
+        return res
+
+    def unlink_room_bookings(self):
+        for event in self:
+            if event.stage_id.pipe_end and event.stage_id.name == "Cancelado":
+                event.room_booking_ids.unlink()
+        return True
