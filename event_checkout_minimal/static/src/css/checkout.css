@@ -171,7 +171,7 @@ body.modal-open {
     background: white;
     border-radius: 0;
     box-shadow: var(--shadow-card);
-    max-width: 800px;
+    max-width: 900px;
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 300px;
@@ -647,6 +647,88 @@ body.modal-open {
     text-decoration: underline;
 }
 
+/* Deposit Information Box (Sidebar) */
+.deposit-info-box {
+    background: linear-gradient(135deg, #fff5f9 0%, #ffe9f3 100%);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.deposit-info-box h4 {
+    color: var(--primary-color);
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+}
+
+.deposit-message {
+    font-size: 14px;
+    color: #333;
+    margin: 8px 0;
+}
+
+.deposit-amount {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 12px;
+    border-radius: 6px;
+    margin: 12px 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.deposit-amount .deposit-label {
+    color: var(--text-primary);
+}
+
+.deposit-amount .js_deposit_amount {
+    color: var(--primary-color);
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.deposit-note {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    font-style: italic;
+    margin-top: 8px;
+}
+
+/* Deposit Banner (Event Header) */
+.deposit-banner {
+    background: linear-gradient(90deg, #fff5f9 0%, #ffe9f3 100%);
+    border-left: 4px solid var(--primary-color);
+    padding: 12px 16px;
+    margin: 16px 0 0 0;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    grid-column: 1 / -1;
+}
+
+.deposit-banner-icon {
+    font-size: 20px;
+}
+
+.deposit-banner-text {
+    font-size: 15px;
+    color: #333;
+    font-weight: 500;
+}
+
+.deposit-banner-text .js_deposit_amount_header {
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 16px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .minimal-checkout-wrapper {
@@ -691,6 +773,14 @@ body.modal-open {
         flex-direction: column;
         gap: 0.5rem;
         text-align: center;
+    }
+
+    .deposit-banner {
+        padding: 10px 12px;
+    }
+
+    .deposit-banner-text {
+        font-size: 14px;
     }
 }
 
