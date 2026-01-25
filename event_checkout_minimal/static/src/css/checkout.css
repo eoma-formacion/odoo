@@ -60,6 +60,7 @@ body.modal-open {
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow-x: hidden;
 }
 
 /* Company Logo */
@@ -734,41 +735,49 @@ body.modal-open {
     .minimal-checkout-wrapper {
         padding: 1rem 0.5rem;
     }
-    
+
     .checkout-card {
         grid-template-columns: 1fr;
         max-width: 100%;
+        overflow: hidden;
     }
-    
+
     .order-sidebar {
         border-left: none;
         border-top: 1px solid var(--border-color);
     }
-    
+
     .event-header {
         padding: 1.5rem 1.5rem 1rem;
     }
-    
+
     .step-content {
         padding: 1.5rem;
     }
-    
+
     .order-sidebar {
         padding: 1.5rem;
     }
-    
+
     .event-title {
         font-size: 20px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
-    
+
+    .event-location {
+        white-space: normal;
+        word-wrap: break-word;
+    }
+
     .progress-container {
         padding: 0 1rem;
     }
-    
+
     .step-title {
         display: none;
     }
-    
+
     .checkout-footer {
         flex-direction: column;
         gap: 0.5rem;
@@ -790,16 +799,18 @@ body.modal-open {
         align-items: stretch;
         gap: 1rem;
     }
-    
+
     .ticket-quantity {
         margin-left: 0;
-        align-self: flex-end;
+        align-self: stretch;
+        display: flex;
+        justify-content: flex-end;
     }
-    
+
     .step-actions {
         flex-direction: column;
     }
-    
+
     .btn-next, .btn-back, .btn-primary {
         width: 100%;
     }
