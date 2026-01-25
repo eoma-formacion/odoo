@@ -69,7 +69,7 @@
                     <!-- Checkout Card -->
                     <div class="checkout-card">
                         <!-- Event Header -->
-                        <div t-attf-class="event-header {{ 'event-header-with-banner' if event.event_banner else '' }}" 
+                        <div t-attf-class="event-header {{ 'event-header-with-banner' if event.event_banner else '' }}"
                              t-attf-style="{{ 'background-image: url(/web/image/event.event/' + str(event.id) + '/event_banner); background-size: cover; background-position: center;' if event.event_banner else '' }}">
                             <div class="event-header-content">
                                 <h1 t-attf-class="event-title {{ 'text-white' if event.event_banner else '' }}" t-field="event.name"/>
@@ -84,6 +84,14 @@
                                         </span>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- Deposit Banner -->
+                        <div class="deposit-banner">
+                            <span class="deposit-banner-icon">ℹ️</span>
+                            <span class="deposit-banner-text">
+                                Reserva con solo el 20% (<span class="js_deposit_amount_header">0,00 €</span>)
+                            </span>
                         </div>
 
                         <!-- Step Content -->
@@ -240,6 +248,22 @@
                             <div class="order-items" id="order-summary">
                                 <div class="empty-cart">No hay entradas seleccionadas</div>
                             </div>
+
+                            <!-- Deposit Information Box -->
+                            <div class="deposit-info-box">
+                                <h4>¡Reserva tu plaza!</h4>
+                                <p class="deposit-message">
+                                    Puedes reservar con solo el <strong>20%</strong>
+                                </p>
+                                <div class="deposit-amount">
+                                    <span class="deposit-label">Reserva con:</span>
+                                    <span class="js_deposit_amount">0,00 €</span>
+                                </div>
+                                <small class="deposit-note">
+                                    El resto se abona antes del evento
+                                </small>
+                            </div>
+
                             <div class="order-total">
                                 <div class="total-line">
                                     <span>Total: </span>
@@ -300,7 +324,7 @@
                         <!-- Checkout Card -->
                         <div class="checkout-card">
                             <!-- Event Header -->
-                            <div t-attf-class="event-header {{ 'event-header-with-banner' if event.event_banner else '' }}" 
+                            <div t-attf-class="event-header {{ 'event-header-with-banner' if event.event_banner else '' }}"
                                  t-attf-style="{{ 'background-image: url(/web/image/event.event/' + str(event.id) + '/event_banner); background-size: cover; background-position: center;' if event.event_banner else '' }}">
                                 <div class="event-header-content">
                                     <h1 t-attf-class="event-title {{ 'text-white' if event.event_banner else '' }}" t-field="event.name"/>
@@ -315,6 +339,14 @@
                                         </span>
                                     </div>
                                 </div>
+                            </div>
+
+                            <!-- Deposit Banner -->
+                            <div class="deposit-banner">
+                                <span class="deposit-banner-icon">ℹ️</span>
+                                <span class="deposit-banner-text">
+                                    Reserva con solo el 20% (<span class="js_deposit_amount_header">0,00 €</span>)
+                                </span>
                             </div>
 
                             <!-- Step Content -->
@@ -471,6 +503,22 @@
                                 <div class="order-items" id="order-summary">
                                     <div class="empty-cart">No hay entradas seleccionadas</div>
                                 </div>
+
+                                <!-- Deposit Information Box -->
+                                <div class="deposit-info-box">
+                                    <h4>¡Reserva tu plaza!</h4>
+                                    <p class="deposit-message">
+                                        Puedes reservar con solo el <strong>20%</strong>
+                                    </p>
+                                    <div class="deposit-amount">
+                                        <span class="deposit-label">Reserva con:</span>
+                                        <span class="js_deposit_amount">0,00 €</span>
+                                    </div>
+                                    <small class="deposit-note">
+                                        El resto se abona antes del evento
+                                    </small>
+                                </div>
+
                                 <div class="order-total">
                                     <div class="total-line">
                                         <span>Total: </span>

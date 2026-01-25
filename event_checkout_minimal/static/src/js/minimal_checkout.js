@@ -106,10 +106,13 @@ publicWidget.registry.MinimalCheckout = publicWidget.Widget.extend({
     _updateOrderSummary: function () {
         const orderItemsEl = this.el.querySelector('#order-summary');
         const totalAmountEls = this.el.querySelectorAll('.total-amount');
-        
+
         // Calculate total
         this.totalAmount = Object.values(this.selectedTickets).reduce((sum, ticket) => sum + ticket.subtotal, 0);
-        
+
+        // Calculate 20% deposit
+        const depositAmount = this.totalAmount * 0.20;
+
         // Update order items display
         if (Object.keys(this.selectedTickets).length === 0) {
             orderItemsEl.innerHTML = '<div class="empty-cart">No hay entradas seleccionadas</div>';
@@ -123,14 +126,27 @@ publicWidget.registry.MinimalCheckout = publicWidget.Widget.extend({
                     </div>
                 </div>
             `).join('');
-            
+
             orderItemsEl.innerHTML = itemsHtml;
         }
-        
+
         // Update all total amount displays
         const formattedTotal = this._formatPrice(this.totalAmount);
         totalAmountEls.forEach(el => {
             el.textContent = formattedTotal;
+        });
+
+        // Update deposit amount displays (sidebar and header)
+        const formattedDeposit = this._formatPrice(depositAmount);
+        const depositAmountEls = this.el.querySelectorAll('.js_deposit_amount');
+        const depositAmountHeaderEls = this.el.querySelectorAll('.js_deposit_amount_header');
+
+        depositAmountEls.forEach(el => {
+            el.textContent = formattedDeposit;
+        });
+
+        depositAmountHeaderEls.forEach(el => {
+            el.textContent = formattedDeposit;
         });
     },
 
