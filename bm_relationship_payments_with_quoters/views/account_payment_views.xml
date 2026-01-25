@@ -18,6 +18,7 @@
             <xpath expr="//field[@name='partner_id']" position="after">
                 <field name="payment_type" invisible="1"/>
                 <field name="quoter_id" />
+                <field name="salesperson_id" />
             </xpath>
         </field>
     </record>
