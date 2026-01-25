@@ -11,4 +11,16 @@
             </xpath>
         </field>
     </record>
+
+    <!-- Add salesperson field to event registration list view -->
+    <record id="view_event_registration_tree_inherit_salesperson" model="ir.ui.view">
+        <field name="name">event.registration.list.inherit.salesperson</field>
+        <field name="model">event.registration</field>
+        <field name="inherit_id" ref="event.view_event_registration_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='sale_order_id']" position="after">
+                <field name="salesperson_id" optional="show"/>
+            </xpath>
+        </field>
+    </record>
 </odoo>

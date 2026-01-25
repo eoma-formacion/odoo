@@ -39,6 +39,7 @@ Usage:
         "payment",
         "website_sale",
         "sale",
+        "event_sale",
     ],
     "data": [
         "security/ir.model.access.csv",

@@ -21,6 +21,7 @@
                 <field name="date_order"/>
                 <field name="partner_id"/>
                 <field name="sale_order_template_id"/>
+                <field name="user_id" string="Vendedor"/>
                 <field name="amount_total"/>
                 <field name="total_paid"/>
                 <field name="remaining_amount"/>
